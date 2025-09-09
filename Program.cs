@@ -1,3 +1,6 @@
+﻿using Aplicacion_SOA.Models;
+using Aplicacion_SOA.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aplicacion_SOA
 {
@@ -8,11 +11,17 @@ namespace Aplicacion_SOA
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // 📌 Registrar el DbContext con la cadena de conexión de appsettings.json
+            builder.Services.AddDbContext<CatalogoContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Catalogo")));
+
+            // 📌 Registrar los servicios de negocio
+            builder.Services.AddScoped<IProductoService, ProductoService>();
+            builder.Services.AddScoped<IClienteService, ClienteService>();
 
             var app = builder.Build();
 
@@ -24,10 +33,7 @@ namespace Aplicacion_SOA
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
 
             app.Run();

@@ -22,6 +22,7 @@ namespace Aplicacion_SOA
             // 📌 Registrar los servicios de negocio
             builder.Services.AddScoped<IProductoService, ProductoService>();
             builder.Services.AddScoped<IClienteService, ClienteService>();
+            builder.Services.AddScoped<IPedidosService, PedidosService>();
 
 
             // Configurar CORS (opcional para desarrollo)
@@ -44,7 +45,7 @@ namespace Aplicacion_SOA
                 app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Aplicacion SOA v1");
-                    c.RoutePrefix = string.Empty; // Swagger en la raíz
+                    //c.RoutePrefix = string.Empty; // Swagger en la raíz
                 });
             }
 

@@ -48,6 +48,12 @@ namespace Aplicacion_SOA.Services
 
         public async Task<bool> DeleteCliente(string cedula)
         {
+            var tienePedidos = await _context.Pedidos.AnyAsync(p => p.ClienteId == cedula);
+            if (tienePedidos)
+            {
+                throw new InvalidOperationException("No se puede eliminar el cliente porque tiene pedidos asociados.");
+            }
+
             var cliente = await _context.Clientes.FindAsync(cedula);
             if (cliente == null)
                 return false;

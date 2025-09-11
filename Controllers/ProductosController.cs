@@ -103,11 +103,13 @@ namespace CatalogoProductos.Controllers
             {
                 var eliminado = await _productoService.DeleteProducto(id);
                 if (!eliminado)
-                {
                     return NotFound($"Producto con ID {id} no encontrado");
-                }
 
                 return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
             }
             catch (Exception ex)
             {
@@ -115,5 +117,6 @@ namespace CatalogoProductos.Controllers
                 return StatusCode(500, "Error interno del servidor");
             }
         }
+
     }
 }

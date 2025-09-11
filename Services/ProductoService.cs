@@ -52,6 +52,12 @@ namespace Aplicacion_SOA.Services
             if (producto == null)
                 return false;
 
+            bool tienePedidos = await _context.Pedidos
+                .AnyAsync(p => p.ProductoId == id);
+
+            if (tienePedidos)
+                throw new InvalidOperationException("No se puede eliminar el producto porque está asociado a pedidos.");
+
             _context.Productos.Remove(producto);
             await _context.SaveChangesAsync();
             return true;

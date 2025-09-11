@@ -54,12 +54,24 @@ namespace Aplicacion_SOA.Controllers
         [HttpDelete("{cedula}")]
         public async Task<IActionResult> DeleteCliente(string cedula)
         {
-            var eliminado = await _clienteService.DeleteCliente(cedula);
-            if (!eliminado)
-                return NotFound($"Cliente con cédula {cedula} no encontrado");
+            try
+            {
+                var eliminado = await _clienteService.DeleteCliente(cedula);
+                if (!eliminado)
+                    return NotFound($"Cliente con cédula {cedula} no encontrado");
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error interno del servidor");
+            }
         }
+
     }
 }
 
